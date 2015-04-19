@@ -14,12 +14,20 @@ public class Player : MonoBehaviour {
 	void Start () {
 		rb2d = gameObject.GetComponent<Rigidbody2D>();
 		anim = gameObject.GetComponent<Animator>();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		anim.SetBool ("Grounded", Grounded);
-		anim.SetFloat("Speed",Mathf.Abs(Input.GetAxis("Horizontal")));
+		anim.SetFloat("Speed",Mathf.Abs(rb2d.velocity.x));
+		//Set mirror character
+		if (Input.GetAxis ("Horizontal") < -0.1f) {
+			transform.localScale=new Vector3(-0.2f,0.2f,1f);
+		}
+		if (Input.GetAxis ("Horizontal") > 0.1f) {
+			transform.localScale=new Vector3(0.2f,0.2f,1f);
+		}
 	}
 
 	//Called per tick
@@ -34,5 +42,7 @@ public class Player : MonoBehaviour {
 			rb2d.velocity = new Vector2(-maxSpeed,rb2d.velocity.y);
 		}
 		//gerak atas bawah
+
+		rb2d.AddForce((Vector2.up * Speed) * Input.GetAxis("Vertical"));
 	}
 }
